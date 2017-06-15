@@ -1,0 +1,52 @@
+{
+  "name": "server",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "test": "istanbul cover _mocha test/**/**/*.js",
+		"utest" :"istanbul cover _mocha test/UnitTest/**/*.js",
+    "contest": "istanbul cover _mocha test/IntegrationTest/**/*.js",
+    "debug-test": "mocha --debug-brk test/data/data-facade-test.js --ui qunit --compilers js:babel-register --require babel-polyfill",
+    "complie": "babel model -d lib",
+    "unit-devtool-debug": "devtool ./node_modules/mocha/bin/_mocha -qc -- ./test/UnitTest/**/*.js ",
+    "Integ-devtool-debug": "devtool ./node_modules/mocha/bin/_mocha -qc -- ./test/IntegrationTest/**/*.js "
+  },
+  "engines": {
+    "node": ">=6"
+  },
+  "author": " <>",
+  "dependencies": {
+    "babel-core": "^6.17.0",
+    "babel-polyfill": "^6.16.0",
+    "babel-register": "^6.16.3",
+    "bluebird": "^3.4.1",
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "helmet": "^2.1.2",
+    "lodash": "^4.15.0",
+    "mongoose": "^4.5.9",
+    "morgan": "^1.7.0",
+    "sinon": "^1.17.6",
+    "sinon-mongoose": "^1.3.0",
+    "supertest": "^2.0.1"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-es2015-destructuring": "^6.16.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.16.0",
+    "babel-plugin-transform-es2015-parameters": "^6.17.0",
+    "babel-plugin-transform-es2015-spread": "^6.8.0",
+    "babel-plugin-transform-strict-mode": "^6.11.3",
+    "babel-preset-es2015": "^6.16.0",
+    "chai": "^3.5.0",
+    "eslint": "^3.2.2",
+    "eslint-config-airbnb": "^10.0.0",
+    "eslint-plugin-import": "^1.12.0",
+    "eslint-plugin-jsx-a11y": "^2.0.1",
+    "eslint-plugin-react": "^6.0.0",
+    "mocha": "^3.1.0",
+    "nodemon": "^1.9.2"
+  }
+}
