@@ -1,11 +1,10 @@
-debugger;
-var mongoose = require('mongoose');
-var config = require('../test-config');
-var chai = require('chai');
-var expect = chai.expect;
+const mongoose = require('mongoose');
+const config = require('../test-config');
+const chai = require('chai');
+const expect = chai.expect;
 
-var app = require('../../../index');
-var request = require('supertest')(app);
+const app = require('../../../index');
+const request = require('supertest')(app);
 
 describe('Integration: data-controller.js -- Create Data ', () => {
     before(() => {
@@ -23,7 +22,7 @@ describe('Integration: data-controller.js -- Create Data ', () => {
     });
 
 
-    it('should create success and return status 200', (done) => {
+    it('should create success and return status 200', () => {
         let input = {
             author: "Mark",
             data: [{
@@ -34,31 +33,13 @@ describe('Integration: data-controller.js -- Create Data ', () => {
         };
 
 
-        var createPromise = new Promise((resolve, reject) => {
-            request
-                .post('/datas')
-                .send(input)
-                .expect(200)
-                .end((err, res) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(res);
-                    }
-                })
-        });
-
-        createPromise.then((res) => {
-            var dataKey = res.body._id;
-            request
-                .del('/datas/' + dataKey)
-                .expect(200)
-                .end((err, res) => {
-                    done();
-                })
-        }).catch((err) => {
-            next(err);
-        });
+        return request.post('/datas')
+            .send(input)
+            .expect(200)
+            .then((res) => {
+                const dataKey = res.body._id;
+                return request.del('/datas/' + dataKey);
+            })
     });
 
     it('should create fail  valid err and return status 400', () => {
@@ -67,10 +48,10 @@ describe('Integration: data-controller.js -- Create Data ', () => {
             author: "Mark"
         };
 
-        return  request
-                .post('/datas')
-                .send(input)
-                .expect(400)
+        return request
+            .post('/datas')
+            .send(input)
+            .expect(400)
     });
 });
 
@@ -90,8 +71,8 @@ describe('Integration: data-controller.js -- Get All Data ', () => {
     });
 
 
-    it('should create 2 data and get allData expect 2', (done) => {
-        let input1 = {
+    it('should get 2 records when the create 2 records', () => {
+        const input1 = {
             data: [{
                 "id": "1",
                 "author": "mark"
@@ -99,7 +80,7 @@ describe('Integration: data-controller.js -- Get All Data ', () => {
             describe: "Test",
             author: "Mark"
         };
-        let input2 = {
+        const input2 = {
             data: [{
                 "id": "1",
                 "author": "mark"
@@ -108,52 +89,33 @@ describe('Integration: data-controller.js -- Get All Data ', () => {
             author: "Mark"
         };
 
-        var createPromise = (input) => {
-            return new Promise((resolve, reject) => {
-                request
-                    .post('/datas')
-                    .send(input)
-                    .expect(200)
-                    .end((err, res) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            resolve(res);
-                        }
-                    })
-            });
-        };
-
-        var delPromise = (id) => {
-            return new Promise((resolve, reject) => {
-                request
-                    .del('/datas/' + id)
-                    .expect(200)
-                    .end((err, res) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            resolve(res);
-                        }
-                    })
-            });
-        };
-
-        Promise.all([createPromise(input1), createPromise(input2)]).then((datas) => {
-            var data1_id = datas[0].body._id;
-            var data2_id = datas[1].body._id;
-            request
-                .get('/datas')
+        const createPromise = (input) => {
+            return request
+                .post('/datas')
+                .send(input)
                 .expect(200)
-                .end((err, res) => {
-                    Promise.all([delPromise(data1_id), delPromise(data2_id)])
-                        .then((datas) => {
-                            done();
-                        });
-                });
-        }).catch(err => {
-            next(err);
-        });
+        };
+
+        const delPromise = (id) => {
+            return request
+                .del('/datas/' + id)
+                .expect(200)
+        };
+
+        let data1_id, data2_id;
+        return Promise.all([createPromise(input1), createPromise(input2)])
+            .then((datas) => {
+                data1_id = datas[0].body._id;
+                data2_id = datas[1].body._id;
+                return request
+                    .get('/datas')
+                    .expect(200)
+            }).then(() => {
+                return Promise.all([delPromise(data1_id), delPromise(data2_id)])
+            }).catch(err => {
+                console.log(err);
+                next(err);
+            });
     });
 });
 
@@ -184,49 +146,22 @@ describe('Integration: data-controller.js -- Get Data by Id', () => {
         };
 
         var createPromise = (input) => {
-            return new Promise((resolve, reject) => {
-                request
-                    .post('/datas')
-                    .send(input)
-                    .expect(200)
-                    .end((err, res) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            resolve(res);
-                        }
-                    })
-            });
+            return request
+                .post('/datas')
+                .send(input)
+                .expect(200)
         };
 
         var delPromise = (id) => {
-            return new Promise((resolve, reject) => {
-                request
-                    .del('/datas/' + id)
-                    .expect(200)
-                    .end((err, res) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            resolve(res);
-                        }
-                    })
-            });
+            return request
+                .del('/datas/' + id)
+                .expect(200)
         };
 
         var getDataPromise = (id) => {
-            return new Promise((resolve, reject) => {
-                request
-                    .get('/datas/' + id)
-                    .expect(200)
-                    .end((err, res) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            resolve(res);
-                        }
-                    })
-            });
+            return request
+                .get('/datas/' + id)
+                .expect(200)
         }
 
         var data1_id;
