@@ -3,7 +3,9 @@ mongoose.Promise = global.Promise;
 exports.DB = 'mongodb://localhost/test1';
 
 exports.connect = (callback) => {
-	mongoose.connect(exports.DB,callback);
+    if(mongoose.connection.readyState == 0){
+	    mongoose.connect(exports.DB,callback);
+    }
 }
 
 exports.close = (callback) => {

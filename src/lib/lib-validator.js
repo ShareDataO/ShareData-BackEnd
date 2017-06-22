@@ -64,6 +64,9 @@ var validator = {
 
 validator.types.isNonEmpty = {
   validate: function(value) {
+    if(typeof value == "undefined"){
+        return false;
+    }
     return value.replace(/(^\s*)|(\s*$)/g, "").length !== 0;
   },
   instructions: "the value can't be empty"

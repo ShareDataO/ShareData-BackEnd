@@ -1,14 +1,13 @@
-debugger;
-var chai = require('chai');
-var sinon = require('sinon');
-var expect = chai.expect;
+const chai = require('chai');
+const sinon = require('sinon');
+const expect = chai.expect;
 
-var mongoose = require('mongoose');
+let mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-var DataApiService = require('../../../src/model/data/dataApi-service');
-var DataDetailSchema = require('../../../src/model/data/dataDetail-schema');
-var Service = new DataApiService(DataDetailSchema);
+const DataApiService = require('../../../src/model/data/dataApi-service');
+const DataDetailSchema = require('../../../src/factories/schema-factory').DataDetailSchema;
+const Service = new DataApiService(DataDetailSchema);
 
 describe('UNIT:dataApi-service.js -- Get Data', () => {
 

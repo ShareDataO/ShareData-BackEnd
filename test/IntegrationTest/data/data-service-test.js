@@ -1,13 +1,12 @@
-debugger;
-var mongoose = require('mongoose');
-var config = require('../test-config');
-var chai = require('chai');
-var expect = chai.expect;
+const mongoose = require('mongoose');
+const config = require('../test-config');
+const chai = require('chai');
+const expect = chai.expect;
 
-var DataService = require('../../../src/model/data/data-service');
-var Schema = require('../../../src/model/data/data-schema');
-var DataDetailSchema = require('../../../src/model/data/dataDetail-schema');
-var Service = new DataService(Schema, DataDetailSchema);
+const DataService = require('../../../src/model/data/data-service');
+const Schema = require('../../../src/factories/schema-factory').DataSchema;
+const DataDetailSchema = require('../../../src/factories/schema-factory').DataDetailSchema;
+const Service = new DataService(Schema, DataDetailSchema);
 
 describe('Integration: data-service.js -- Get Data', () => {
   before(() => {

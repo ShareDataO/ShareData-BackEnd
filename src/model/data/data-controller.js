@@ -1,8 +1,8 @@
 const DataService = require('./data-service');
-var DataSchema = require('./data-schema');
-var DataDetailSchema = require('./dataDetail-schema');
+const DataSchema = require('../../factories/schema-factory').DataSchema;
+const DataDetailSchema = require('../../factories/schema-factory').DataDetailSchema;
 
-var dataService = new DataService(DataSchema, DataDetailSchema);
+const dataService = new DataService(DataSchema, DataDetailSchema);
 
 class DataController {
   constructor(dataService) {

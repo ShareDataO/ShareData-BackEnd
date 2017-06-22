@@ -1,16 +1,14 @@
-debugger;
-var chai = require('chai');
-var sinon = require('sinon');
-var expect = chai.expect;
-
-var mongoose = require('mongoose');
+const chai = require('chai');
+const sinon = require('sinon');
+const expect = chai.expect;
+let mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-var DataService = require('../../../src/model/data/data-service');
-var Schema = require('../../../src/model/data/data-schema');
-var DataDetailSchema = require('../../../src/model/data/dataDetail-schema');
-var Service = new DataService(Schema, DataDetailSchema);
-var parserObj = require('../../../src/parser/jsonParser');
+const DataService = require('../../../src/model/data/data-service');
+const Schema = require('../../../src/factories/schema-factory').DataSchema;
+const DataDetailSchema = require('../../../src/factories/schema-factory').DataDetailSchema;
+const Service = new DataService(Schema, DataDetailSchema);
+const parserObj = require('../../../src/parser/jsonParser');
 
 describe('UNIT:data-service.js -- Get All Data', function() {
   var find;

@@ -12,9 +12,6 @@ function parser(datas, key) {
       "msg": "Input not array or object"
     }
 
-  if (!key)
-    key = obj.selectKey(datas);
-
   var result = [];
   if (!datas.hasOwnProperty("length")) {
     result.push(datas);
@@ -24,7 +21,7 @@ function parser(datas, key) {
   return {
     "status": true,
     "datas": result,
-		"key" : key
+		"key" : "_id_" 
   };
 }
 
