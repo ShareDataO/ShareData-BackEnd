@@ -9,7 +9,7 @@ router.route('/:author/:dataId')
 router.route('/:author/:dataId/:selectId')
   .get((...args) => controller.apiGetDataById(...args));
 
-router.route('/graphql')
+router.route('/:author/:dataId/graphql')
   .post((...args) => controller.graphQl(...args));
 
 module.exports = router;

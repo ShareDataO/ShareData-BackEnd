@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const config = require('../test-config');
 const chai = require('chai');
-const expect = chai.expect;
+const assert = chai.assert;
 
 const app = require('../../../index');
 const request = require('supertest')(app);
@@ -22,8 +22,8 @@ describe('Integration: dataApi-controller.js -- Get Data use restful api ', () =
     });
 
 
-    it('should get data and return status 200', (done) => {
-        let input = {
+    it('should get data and return status 200', () => {
+        const input = {
             data: [{
                 "id": "1",
                 "author": "mark"
@@ -32,50 +32,64 @@ describe('Integration: dataApi-controller.js -- Get Data use restful api ', () =
             describe: "Test"
         };
 
-        var createPromise = new Promise((resolve, reject) => {
-            request
-                .post('/datas')
-                .send(input)
-                .expect(200)
-                .end((err, res) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(res);
-                    }
-                })
-        });
 
-        var getPromise = function(url) {
-            return new Promise((resolve, reject) => {
-                request
-                    .get(url)
+        let keyId = "";
+        return request.post('/datas').send(input).expect(200)
+            .then((res) => {
+                assert.equal(res.body.author, "Mark");
+                keyId = res.body._id;
+                const author = "mark";
+                const url = `/api/${author}/${keyId}-datas`;
+                return request.get(url).expect(200);
+            }).then(() => {
+                return request
+                    .del("/datas/" + keyId)
                     .expect(200)
-                    .end((err, res) => {
-                        var actualDatas = res.body;
-                        resolve(actualDatas);
-                        expect(actualDatas.length).to.equal(1);
-                    })
-            });
-        };
+            })
+    });
+});
 
-        var keyId = "";
-        createPromise.then((createRes) => {
-            keyId = createRes.body._id;
-            var author = "mark";
-            var url = '/api/' + author + '/' + keyId + '-datas';
-            return getPromise(url);
-        }).then((resolve, reject) => {
-            request
-                .del("/datas/" + keyId)
-                .expect(200)
-                .end((err, res) => {
-                    done();
-                })
-        }).catch((err) => {
-            console.log(err);
+describe('Integration: dataApi-controller.js -- Getting Data by graphQL api ', () => {
+    before(() => {
+        config.connect((err) => {
+            if (err) {
+                console.log(err.message);
+            }
         });
-
     });
 
+    after(() => {
+        config.close((msg) => {
+            console.log(msg);
+        });
+    });
+
+
+    it('should get data and return status 200', () => {
+        const input = {
+            data: [{
+                "id": "1",
+                "author": "mark",
+                "company": "001",
+                "age": 20
+            }],
+            author: "Mark",
+            describe: "Test"
+        };
+
+        let keyId = "";
+        return request.post('/datas').send(input)
+            .then((createRes) => {
+                keyId = createRes.body._id;
+                const author = "mark";
+                return request.post(`/api/${author}/${keyId}-datas/graphql`)
+                    .send({
+                        query: `{author}`
+                    });
+            }).then((res) => {
+                assert.property(res.body.data, "author");
+                assert.notProperty(res.body.data, "id");
+                return request.del(`/datas/${keyId}`).expect(200)
+            })
+    });
 });

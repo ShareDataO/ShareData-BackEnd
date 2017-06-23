@@ -6,8 +6,8 @@ const DataDetailSchema = require('../../factories/schema-factory').DataDetailSch
 const dataService = new DataService(DataSchema, DataDetailSchema);
 const dataApiService = new DataApiService(DataDetailSchema);
 
-//const graphql = require('graphql');
-//const scheam = rquire('./graphQl-schema'); 
+const graphql = require('graphql').graphql;
+const graphQlScheam = require('./schemas/graphQl-schema');
 
 class DataApiController {
     constructor(dataService, dataApiService) {
@@ -52,10 +52,24 @@ class DataApiController {
             next(e);
         }
     };
-    
-    graphQl(req, res, next){
-        
 
+    graphQl(req, res, next) {
+        var dataIdString = req.params.dataId;
+        var dataId = dataIdString.split('-')[0];
+        var author = req.params.author;
+        var result = this.dataApiService.get(dataId);
+        let query = req.body.query;
+        result.then((datas) => {
+            if (datas) {
+              return  graphql(graphQlScheam(datas),query)
+            } else {
+                return res.status(500).end();
+            }
+        }).then((datas)=>{
+           return res.status(200).json(datas); 
+        }).catch((err)=>{
+            next(err);
+        })
     }
 }
 
