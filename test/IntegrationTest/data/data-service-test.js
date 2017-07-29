@@ -138,16 +138,16 @@ describe('Integration: data-service.js -- Update DataDetail', () => {
       "author": "Mark"
     }
     let createResult = Service.create(datas);
-		var dataId;
+    var dataId;
     createResult.then((data) => {
       dataId = data._id.toString();
       return Service.updateDataDetail({
-				"dataId" : dataId,
+        "dataId": dataId,
         "data.id": "1"
       }, {
-        "id": "1",
-        "author": "Lin"
-      });
+          "id": "1",
+          "author": "Lin"
+        });
     }).then((result) => {
       expect(result.data.author).to.equal("Lin");
       return Service.remove(dataId);
@@ -160,6 +160,7 @@ describe('Integration: data-service.js -- Update DataDetail', () => {
 });
 
 describe('Integration: data-service.js -- Get All Data', () => {
+  let removeId;
   before(() => {
     config.connect((err) => {
       if (err) {
@@ -168,38 +169,38 @@ describe('Integration: data-service.js -- Get All Data', () => {
     });
   });
 
-  after(() => {
-    config.close((msg) => {
-      console.log(msg);
-    });
-  });
-
-
-  it('should return all datas and clear datas', (done) => {
-    let obj = [{
+  before(() => {
+    const obj = [{
       "id": "1"
     }, {
       "id": "2"
     }, {
       "id": "3"
     }];
-    let datas = {
+    const datas = {
       "data": obj,
       "describe": "test",
       "author": "Mark"
     }
-    let createResult = Service.create(datas);
+    return Service.create(datas);
+  });
 
-    createResult.then((data) => {
-      return Service.getAllData();
-    }).then((datas) => {
-      expect(datas.length).to.equal(1);
-      var removeId = datas[0]._id.toString();
-      return Service.remove(removeId);
-    }).then((msg) => {
-      done();
-    }).catch((err) => {
-      console.log(err);
+
+  it('should return all datas', () => {
+    return Service.getAllData()
+      .then((datas) => {
+        expect(datas.length).to.equal(1);
+        removeId = datas[0]._id.toString();
+      });
+  });
+
+  after(() => {
+    return Service.remove(removeId);
+  });
+
+  after(() => {
+    config.close((msg) => {
+      console.log(msg);
     });
   });
 });

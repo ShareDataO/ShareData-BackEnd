@@ -1,5 +1,6 @@
 const chai = require('chai');
 const sinon = require('sinon');
+require('sinon-as-promised');
 const expect = chai.expect;
 
 let mongoose = require('mongoose');
@@ -11,31 +12,27 @@ const Service = new DataApiService(DataDetailSchema);
 
 describe('UNIT:dataApi-service.js -- Get Data', () => {
 
-	var find;
-  beforeEach(() => {});
+	let sandbox;
 
-  before(() => {
-    find = sinon.stub(DataDetailSchema, 'find');
-  });
+	before(() => {
+		const expectResult = [{ "id": "1" }, { "id": "2" }];
+		sandbox = sinon.sandbox.create();
+		findStub = sandbox.stub(DataDetailSchema, 'find')
+			.resolves(expectResult)
+	});
 
-  after(() => {
-    DataDetailSchema.find.restore();
-  });
+	it('should get success', () => {
 
-  it('should get success', (done) => {
+		const dataKey = "XXXXXXAAAABBBB";
 
-		var expectResult = [{"id":"1"},{"id":"2"}];
-		var dataKey = "XXXXXXAAAABBBB";		
-		DataDetailSchema.find.yields(null,expectResult);
-
-		var result = Service.get(dataKey);
-		result.then((datas) => {
-			sinon.assert.calledOnce(find);		
+		return Service.get(dataKey).then((datas) => {
+			sinon.assert.calledOnce(findStub);
 			expect(datas.length).to.equal(2);
-			done();
 		});
 
-  });
+	});
 
-
+	after(() => {
+		 sandbox.restore();
+	});
 });
