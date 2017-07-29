@@ -61,7 +61,8 @@ class DataApiController {
         let query = req.body.query;
         result.then((datas) => {
             if (datas) {
-              return  graphql(graphQlScheam(datas),query)
+              const scheam = graphQlScheam(datas)
+              return  graphql(scheam,query)
             } else {
                 return res.status(500).end();
             }
