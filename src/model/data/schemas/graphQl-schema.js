@@ -9,33 +9,38 @@ const {
 } = require('graphql');
 
 function getScheam(datas) {
-    return _generateDyanmicScheam(datas[0]);
+    return _generateDyanmicScheam(datas);
 }
 
-function _generateDyanmicScheam(data) {
+function _generateDyanmicScheam(datas) {
     let result = new GraphQLSchema({
         query: new GraphQLObjectType({
-            name: 'query',
-            fields: (() => {
-                return _generateField(data);
-            })()
+            name: 'root',
+            fields: {
+                datas: {
+                    type: new GraphQLList(_generateType(datas)),
+                    resolve: ()=>{
+                        return datas;
+                    }
+                }
+            }
         })
     });
     return result;
 }
 
-function _generateField(data) {
+function _generateType(datas) {
     let result = {};
-    const keys = Object.keys(data);
+    const keys = Object.keys(datas[0]);
     keys.forEach((key) => {
         result[key] = {
-            type: _getDataGraphQlType(data[key]),
-            resolve: () => {
-                return data[key];
-            }
+            type: _getDataGraphQlType(datas[0][key]),
         }
     });
-    return result;
+    return new GraphQLObjectType({
+        name: 'dynamic',
+        fields: result
+    })
 }
 
 

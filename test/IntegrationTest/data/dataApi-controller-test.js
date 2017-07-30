@@ -83,26 +83,89 @@ describe('Integration: dataApi-controller.js -- Getting Data from graphQL api ',
         const author = "mark";
         return request.post(`/api/${author}/${keyId}-datas/graphql`)
             .send({
-                query: `{author}`
+                query: `{ datas { author } }`
             }).then((res) => {
-                console.log(res.body)
-                assert.property(res.body.data, "author");
-                assert.notProperty(res.body.data, "id");
+                const result = res.body.data.datas;;
+                assert.isArray(result);
+                assert.lengthOf(result, 1);
+                assert.property(result[0], "author");
+                assert.notProperty(result[0], "id");
             })
     });
 
-    it('should get datas while I will take the author and describe of filed', () => {
+    it('should get datas while I will take the author and age of filed', () => {
         const author = "mark";
         return request.post(`/api/${author}/${keyId}-datas/graphql`)
             .send({
-                query: `{author,age}`
+                query: `{ datas { author,age }}`
             }).then((res) => {
-                console.log(res.body.data);
-                assert.property(res.body.data, "author");
-                assert.property(res.body.data, "age");
-                assert.notProperty(res.body.data, "id");
+                const result = res.body.data.datas;;
+                assert.isArray(result);
+                assert.lengthOf(result, 1);
+                assert.property(result[0], "author");
+                assert.property(result[0], "age");
+                assert.notProperty(result[0], "id");
             })
     });
+
+    after(() => {
+        return request.del(`/datas/${keyId}`).expect(200)
+    });
+
+    after(() => {
+        config.close((msg) => {
+            console.log(msg);
+        });
+    });
+
+});
+
+describe('Integration: dataApi-controller.js -- Getting Data from graphQL api (array data)', () => {
+    let keyId;
+
+    before(() => {
+        return config.connect();
+    });
+
+    before('Creating test data', () => {
+        const input = {
+            data: [{
+                "id": "1",
+                "company": "001",
+                "author": "mark",
+                "age": 20
+            }, {
+                "id": "2",
+                "company": "002",
+                "author": "lin",
+                "age": 20
+            }],
+            author: "Mark",
+            describe: "Test"
+        };
+        return request.post('/datas')
+            .send(input)
+            .then((res) => {
+                keyId = res.body._id;
+            });
+    });
+
+
+    it('should get data and return status 200', () => {
+        const author = "mark";
+        return request.post(`/api/${author}/${keyId}-datas/graphql`)
+            .send({
+                query: `{ datas { author,age } }`
+            }).then((res) => {
+                const result = res.body.data.datas;;
+                assert.isArray(result);
+                assert.lengthOf(result, 2);
+                assert.property(result[0], "author");
+                assert.property(result[0], "age");
+                assert.notProperty(result[0], "id");
+            })
+    });
+
 
     after(() => {
         return request.del(`/datas/${keyId}`).expect(200)

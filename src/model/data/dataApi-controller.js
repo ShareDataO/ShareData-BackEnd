@@ -67,6 +67,10 @@ class DataApiController {
                 return res.status(500).end();
             }
         }).then((datas)=>{
+            if(datas.errors){
+                next(datas.errors[0].message);
+                return;
+            }
            return res.status(200).json(datas); 
         }).catch((err)=>{
             next(err);
