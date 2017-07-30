@@ -8,57 +8,54 @@ const {
     GraphQLObjectType
 } = require('graphql');
 
-function getScheam(datas) {
-    return _generateDyanmicScheam(datas);
+function _getDataGraphQlType(data) {
+  switch (typeof data) {
+    case 'number':
+      return GraphQLInt;
+    case 'string':
+      return GraphQLString;
+    case 'object':
+      return Array.isArray(data) ? GraphQLList : GraphQLObjectType;
+    case 'boolean':
+      return GraphQLBoolean;
+    default:
+      break;
+  }
+}
+
+
+function _generateType(datas) {
+  const result = {};
+  const keys = Object.keys(datas[0]);
+  keys.forEach((key) => {
+    result[key] = {
+      type: _getDataGraphQlType(datas[0][key])
+    };
+  });
+  return new GraphQLObjectType({
+    name: 'dynamic',
+    fields: result
+  });
 }
 
 function _generateDyanmicScheam(datas) {
-    let result = new GraphQLSchema({
-        query: new GraphQLObjectType({
-            name: 'root',
-            fields: {
-                datas: {
-                    type: new GraphQLList(_generateType(datas)),
-                    resolve: ()=>{
-                        return datas;
-                    }
-                }
-            }
-        })
-    });
-    return result;
-}
 
-function _generateType(datas) {
-    let result = {};
-    const keys = Object.keys(datas[0]);
-    keys.forEach((key) => {
-        result[key] = {
-            type: _getDataGraphQlType(datas[0][key]),
+  const result = new GraphQLSchema({
+    query: new GraphQLObjectType({
+      name: 'root',
+      fields: {
+        datas: {
+          type: new GraphQLList(_generateType(datas)),
+          resolve: () => datas
         }
-    });
-    return new GraphQLObjectType({
-        name: 'dynamic',
-        fields: result
+      }
     })
+  });
+  return result;
 }
 
-
-function _getDataGraphQlType(data) {
-    switch (typeof data) {
-        case "number":
-            return GraphQLInt;
-            break;
-        case "string":
-            return GraphQLString;
-            break;
-        case "object":
-            return Array.isArray(data) ? GraphQLList : GraphQLObjectType;
-            break;
-        case "boolean":
-            return GraphQLBoolean;
-    }
+function getScheam(datas) {
+  return _generateDyanmicScheam(datas);
 }
-
 
 module.exports = getScheam;

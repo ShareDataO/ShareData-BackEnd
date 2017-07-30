@@ -25,27 +25,25 @@ describe('Integration: data-service.js -- Get Data', () => {
 
 
   it('should return datas and clear datas', (done) => {
-    let obj = [{
-      "id": "1"
+    const obj = [{
+      id: '1'
     }, {
-      "id": "2"
+      id: '2'
     }, {
-      "id": "3"
+      id: '3'
     }];
-    let datas = {
-      "data": obj,
-      "describe": "test",
-      "author": "Mark"
-    }
-    let createResult = Service.create(datas);
+    const datas = {
+      data: obj,
+      describe: 'test',
+      author: 'Mark'
+    };
+    const createResult = Service.create(datas);
 
-    createResult.then((data) => {
-      return Service.find({
-        _id: data._id.toString()
-      });
-    }).then((datas) => {
+    createResult.then((data) => Service.find({
+      _id: data._id.toString()
+    })).then((datas) => {
       expect(datas.length).to.equal(1);
-      var removeId = datas[0]._id.toString();
+      const removeId = datas[0]._id.toString();
       return Service.remove(removeId);
     }).then((msg) => {
       done();
@@ -70,31 +68,29 @@ describe('Integration: data-service.js -- Get Data (One hundred thousand test)',
     });
   });
   it('should return datas and clear datas', (done) => {
-    let size = 10,
-      datas = [];
+    const size = 10;
+    const datas = [];
 
-    for (var i = 0; i < size; i++) {
+    for (let i = 0; i < size; i++) {
       datas.push({
-        "id": i,
-        "aruthor": "Mark"
-      })
-    };
-
-    let input = {
-      "data": datas,
-      "describe": "million test",
-      "author": "Mark Big"
+        id: i,
+        aruthor: 'Mark'
+      });
     }
 
-    let createResult = Service.create(input);
+    const input = {
+      data: datas,
+      describe: 'million test',
+      author: 'Mark Big'
+    };
 
-    createResult.then((data) => {
-      return Service.find({
-        _id: data._id.toString()
-      });
-    }).then((datas) => {
+    const createResult = Service.create(input);
+
+    createResult.then((data) => Service.find({
+      _id: data._id.toString()
+    })).then((datas) => {
       expect(datas.length).to.equal(1);
-      var removeId = datas[0]._id.toString();
+      const removeId = datas[0]._id.toString();
       return Service.remove(removeId);
     }).then((msg) => {
       done();
@@ -122,34 +118,34 @@ describe('Integration: data-service.js -- Update DataDetail', () => {
 
 
   it('should update success and clear data ', (done) => {
-    let obj = [{
-      "id": "1",
-      "author": "mark"
+    const obj = [{
+      id: '1',
+      author: 'mark'
     }, {
-      "id": "2",
-      "author": "mark"
+      id: '2',
+      author: 'mark'
     }, {
-      "id": "3",
-      "author": "mark"
+      id: '3',
+      author: 'mark'
     }];
-    let datas = {
-      "data": obj,
-      "describe": "test",
-      "author": "Mark"
-    }
-    let createResult = Service.create(datas);
-    var dataId;
+    const datas = {
+      data: obj,
+      describe: 'test',
+      author: 'Mark'
+    };
+    const createResult = Service.create(datas);
+    let dataId;
     createResult.then((data) => {
       dataId = data._id.toString();
       return Service.updateDataDetail({
-        "dataId": dataId,
-        "data.id": "1"
+        dataId,
+        'data.id': '1'
       }, {
-          "id": "1",
-          "author": "Lin"
-        });
+        id: '1',
+        author: 'Lin'
+      });
     }).then((result) => {
-      expect(result.data.author).to.equal("Lin");
+      expect(result.data.author).to.equal('Lin');
       return Service.remove(dataId);
     }).then((msg) => {
       done();
@@ -171,32 +167,28 @@ describe('Integration: data-service.js -- Get All Data', () => {
 
   before(() => {
     const obj = [{
-      "id": "1"
+      id: '1'
     }, {
-      "id": "2"
+      id: '2'
     }, {
-      "id": "3"
+      id: '3'
     }];
     const datas = {
-      "data": obj,
-      "describe": "test",
-      "author": "Mark"
-    }
+      data: obj,
+      describe: 'test',
+      author: 'Mark'
+    };
     return Service.create(datas);
   });
 
 
-  it('should return all datas', () => {
-    return Service.getAllData()
+  it('should return all datas', () => Service.getAllData()
       .then((datas) => {
         expect(datas.length).to.equal(1);
         removeId = datas[0]._id.toString();
-      });
-  });
+      }));
 
-  after(() => {
-    return Service.remove(removeId);
-  });
+  after(() => Service.remove(removeId));
 
   after(() => {
     config.close((msg) => {

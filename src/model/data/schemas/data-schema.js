@@ -10,19 +10,19 @@ const dataSchema = new Schema({
     type: Date,
     default: Date.now
   },
-	author: {
-		type: String,
-		require:true
-	},
-	count:{
-		type:Number
-	},
-	size:{
-		type:Number
-	},
-	key:{
-		type:String
-	}
+  author: {
+    type: String,
+    require: true
+  },
+  count: {
+    type: Number
+  },
+  size: {
+    type: Number
+  },
+  key: {
+    type: String
+  }
 });
 
 module.exports = mongoose.model('Data', dataSchema);

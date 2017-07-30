@@ -4,7 +4,6 @@ const router = new Router();
 
 router.route('/:author/:dataId')
   .get((...args) => controller.apiGetDatas(...args));
-  //.post((...args) => controller.create(...args));
 
 router.route('/:author/:dataId/:selectId')
   .get((...args) => controller.apiGetDataById(...args));

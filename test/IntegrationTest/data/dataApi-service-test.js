@@ -27,39 +27,37 @@ describe('Integration: dataApi-service.js -- Get Data', () => {
 
 
   it('should return datas and clear datas', (done) => {
-    let obj = [{
-      "id": "1",
-      "price": "100"
+    const obj = [{
+      id: '1',
+      price: '100'
     }, {
-      "id": "2",
-      "price": "200"
+      id: '2',
+      price: '200'
     }, {
-      "id": "3",
-      "price": "200"
+      id: '3',
+      price: '200'
     }];
-    let datas = {
-      "data": obj,
-      "describe": "test",
-      "author": "Mark"
-    }
-    let createResult = DataService.create(datas);
-    var dataId = "";
-		createResult.then((data) => {
-			return DataService.find({
-				_id: data._id.toString()
-			});
-		}).then((datas) => {
-			expect(datas.length).to.equal(1);
-			dataId = datas[0]._id.toString();
-			return DataApiService.get(dataId);
-		}).then((datas) => {
-			expect(datas.length).to.equal(3);
-			return DataService.remove(dataId);
-		}).then((err) => {
-			done();
-		}).catch((err) => {
-			console.log(err);
-		});
+    const datas = {
+      data: obj,
+      describe: 'test',
+      author: 'Mark'
+    };
+    const createResult = DataService.create(datas);
+    let dataId = '';
+    createResult.then((data) => DataService.find({
+      _id: data._id.toString()
+    })).then((datas) => {
+      expect(datas.length).to.equal(1);
+      dataId = datas[0]._id.toString();
+      return DataApiService.get(dataId);
+    }).then((datas) => {
+      expect(datas.length).to.equal(3);
+      return DataService.remove(dataId);
+    }).then((err) => {
+      done();
+    }).catch((err) => {
+      console.log(err);
+    });
   });
 });
 

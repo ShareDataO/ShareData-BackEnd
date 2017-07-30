@@ -10,72 +10,68 @@ const graphql = require('graphql').graphql;
 const graphQlScheam = require('./schemas/graphQl-schema');
 
 class DataApiController {
-    constructor(dataService, dataApiService) {
-        this.dataService = dataService;
-        this.dataApiService = dataApiService;
-    }
+  constructor(dataService, dataApiService) {
+    this.dataService = dataService;
+    this.dataApiService = dataApiService;
+  }
 
-    apiGetDatas(req, res, next) {
-        try {
-            var dataIdString = req.params.dataId;
-            var dataId = dataIdString.split('-')[0];
-            var author = req.params.author;
-            var result = this.dataApiService.get(dataId);
-            result.then((datas) => {
-                if (datas) {
-                    return res.status(200).json(datas);
-                } else {
-                    return res.status(500).end();
-                }
-            })
-        } catch (e) {
-            next(e);
+  apiGetDatas(req, res, next) {
+    try {
+      const dataIdString = req.params.dataId;
+      const dataId = dataIdString.split('-')[0];
+      const result = this.dataApiService.get(dataId);
+      result.then((datas) => {
+        if (datas) {
+          return res.status(200).json(datas);
         }
-    };
+        return res.status(500).end();
 
-    apiGetDataById(req, res, next) {
-        try {
-            var dataIdString = req.params.dataId;
-            var dataId = dataIdString.split('-')[0];
-            var author = req.params.author;
-            var selectId = req.params.selectId;
-
-            var result = this.dataApiService.getById(dataId, selectId);
-            result.then((datas) => {
-                if (datas) {
-                    return res.status(200).json(datas);
-                } else {
-                    return res.status(500).end();
-                }
-            })
-        } catch (e) {
-            next(e);
-        }
-    };
-
-    graphQl(req, res, next) {
-        var dataIdString = req.params.dataId;
-        var dataId = dataIdString.split('-')[0];
-        var author = req.params.author;
-        var result = this.dataApiService.get(dataId);
-        let query = req.body.query;
-        result.then((datas) => {
-            if (datas) {
-              const scheam = graphQlScheam(datas)
-              return  graphql(scheam,query)
-            } else {
-                return res.status(500).end();
-            }
-        }).then((datas)=>{
-            if(datas.errors){
-                next(datas.errors[0].message);
-                return;
-            }
-           return res.status(200).json(datas); 
-        }).catch((err)=>{
-            next(err);
-        })
+      });
+    } catch (e) {
+      next(e);
     }
+  }
+
+  apiGetDataById(req, res, next) {
+    try {
+      const dataIdString = req.params.dataId;
+      const dataId = dataIdString.split('-')[0];
+      const selectId = req.params.selectId;
+
+      const result = this.dataApiService.getById(dataId, selectId);
+      result.then((datas) => {
+        if (datas) {
+          return res.status(200).json(datas);
+        }
+        return res.status(500).end();
+
+      });
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  graphQl(req, res, next) {
+    const dataIdString = req.params.dataId;
+    const dataId = dataIdString.split('-')[0];
+    const query = req.body.query;
+    this.dataApiService.get(dataId).then((datas) => {
+      if (datas) {
+        const scheam = graphQlScheam(datas);
+        return  graphql(scheam, query);
+      }
+      return res.status(500).end();
+
+    }).then((datas) => {
+      if (datas.errors) {
+        next(datas.errors[0].message);
+        return;
+      }
+      return res.status(200).json(datas);
+    }).catch((err) => {
+      next(err);
+    });
+  }
 }
 
 module.exports = new DataApiController(dataService, dataApiService);

@@ -1,41 +1,39 @@
-var chai = require('chai');
-var sinon = require('sinon');
-var expect = chai.expect;
+const chai = require('chai');
+const sinon = require('sinon');
+const expect = chai.expect;
 
-var selectKey = require('../../../src/parser/selectKey');
-var parserObj = require('../../../src/parser/jsonParser');
+const selectKey = require('../../../src/parser/selectKey');
+const parserObj = require('../../../src/parser/jsonParser');
 
 describe('UNIT:.jsonParserjs -- Test jsonParser', () => {
-var stub ;
+  let stub;
   before(() => {
-    stub = sinon.stub(selectKey,"selectKey", function customSelctKey() {
-      return "test"
-    });
+    stub = sinon.stub(selectKey, 'selectKey', () => 'test');
   });
 
   after(() => {
-		stub.restore();
+    stub.restore();
   });
 
   it('Test input numer and should return status false', () => {
-    var result = parserObj.jsonParser(1);
+    const result = parserObj.jsonParser(1);
     expect(result.status).to.equal(false);
   });
 
   it('Test obj and should return status true , and result should array ob', () => {
-    var result = parserObj.jsonParser({
-      "a": 1
+    const result = parserObj.jsonParser({
+      a: 1
     });
     expect(result.status).to.equal(true);
-    expect(result.datas.hasOwnProperty("length")).to.equal(true)
+    expect(Object.prototype.hasOwnProperty.call(result.datas, 'length')).to.equal(true);
   });
 
   it('Test array and should returns status true , and result should array', () => {
-    var result = parserObj.jsonParser([{
-      "a": 1
+    const result = parserObj.jsonParser([{
+      a: 1
     }]);
     expect(result.status).to.equal(true);
-    expect(result.datas.hasOwnProperty("length")).to.equal(true)
+    expect(Object.prototype.hasOwnProperty.call(result.datas, 'length')).to.equal(true);
   });
 
 });

@@ -10,7 +10,7 @@ router.route('/').get((req, res) => {
 });
 
 
-router.use('/datas',data);
-router.use('/api',apiData);
+router.use('/datas', data);
+router.use('/api', apiData);
 
 module.exports = router;

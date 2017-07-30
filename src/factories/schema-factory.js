@@ -1,7 +1,7 @@
-var DataSchema = require('../model/data/schemas/data-schema');
-var DataDetailScheam = require('../model/data/schemas/dataDetail-schema.js');
+const DataSchema = require('../model/data/schemas/data-schema');
+const DataDetailScheam = require('../model/data/schemas/dataDetail-schema');
 
 module.exports = {
-    DataSchema:  DataSchema,
-    DataDetailSchema: DataDetailScheam
-}
+  DataSchema,
+  DataDetailSchema: DataDetailScheam
+};

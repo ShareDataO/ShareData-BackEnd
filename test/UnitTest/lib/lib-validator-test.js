@@ -1,50 +1,50 @@
-var chai = require('chai');
-var expect = chai.expect;
+const chai = require('chai');
+const expect = chai.expect;
 
-var validator = require('../../../src/lib/lib-validator');
+const validator = require('../../../src/lib/lib-validator');
 
 describe('UNIT:validator.js -- Test validator', () => {
 
 
   it('Test simple object and one field value is empty', () => {
 
-    var testObj = {
+    const testObj = {
       aaa: 'aaa',
-			bbb: ' '
+      bbb: ' '
     };
 
-		validator.config = {
-			"aaa" : "isNonEmpty",
-			"bbb" :"isNonEmpty"
-		}
+    validator.config = {
+      aaa : 'isNonEmpty',
+      bbb :'isNonEmpty'
+    };
 
-		var result = validator.validate(testObj);
+    const result = validator.validate(testObj);
     expect(result).to.equal(false);
   });
 
   it('Test string varible and is empty', () => {
 
-		var test = ' '; 
+    const test = ' ';
 
-		validator.config = ['isNonEmpty'];
+    validator.config = ['isNonEmpty'];
 
-		var result = validator.validate(test);
+    const result = validator.validate(test);
     expect(result).to.equal(false);
   });
 
   it('Test data is [] and should valiate false', () => {
 
-		var test = {
-			aaa:'aaa',
-			bbb: []
-		}; 
+    const test = {
+      aaa:'aaa',
+      bbb: []
+    };
 
-		validator.config = {
-			"aaa" : "isNonEmpty",
-			"bbb" :"isArrayAndHaveData"
-		}
+    validator.config = {
+      aaa : 'isNonEmpty',
+      bbb :'isArrayAndHaveData'
+    };
 
-		var result = validator.validate(test);
+    const result = validator.validate(test);
     expect(result).to.equal(false);
   });
 });
