@@ -1,4 +1,3 @@
-const GraphQLJSON = require('./graphQl-json-type');
 const GraphQLSchema = require('graphql').GraphQLSchema;
 const {
     GraphQLInt,

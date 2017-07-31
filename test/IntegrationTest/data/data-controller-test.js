@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const config = require('../test-config');
 const chai = require('chai');
 const expect = chai.expect;
@@ -7,18 +6,10 @@ const app = require('../../../index');
 const request = require('supertest')(app);
 
 describe('Integration: data-controller.js -- Create Data ', () => {
-  before(() => {
-    config.connect((err) => {
-      if (err) {
-        console.log(err.message);
-      }
-    });
-  });
+  before(() => config.connect());
 
   after(() => {
-    config.close((msg) => {
-      console.log(msg);
-    });
+    config.close();
   });
 
 
@@ -57,17 +48,11 @@ describe('Integration: data-controller.js -- Create Data ', () => {
 
 describe('Integration: data-controller.js -- Get All Data ', () => {
   before(() => {
-    config.connect((err) => {
-      if (err) {
-        console.log(err.message);
-      }
-    });
+    config.connect();
   });
 
   after(() => {
-    config.close((msg) => {
-      console.log(msg);
-    });
+    config.close();
   });
 
 
@@ -115,17 +100,11 @@ describe('Integration: data-controller.js -- Get All Data ', () => {
 
 describe('Integration: data-controller.js -- Get Data by Id', () => {
   before(() => {
-    config.connect((err) => {
-      if (err) {
-        console.log(err.message);
-      }
-    });
+    config.connect();
   });
 
   after(() => {
-    config.close((msg) => {
-      console.log(msg);
-    });
+    config.close();
   });
 
 

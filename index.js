@@ -22,7 +22,7 @@ mongoose.connect(config.mongo.url);
 
 app.use(helmet());
 app.use(bodyParser.urlencoded({
-  extended: false,
+  extended: false
 }));
 app.use(bodyParser.json());
 app.use(morgan('tiny'));

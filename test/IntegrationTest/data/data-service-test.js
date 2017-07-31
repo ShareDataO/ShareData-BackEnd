@@ -1,26 +1,19 @@
-const mongoose = require('mongoose');
 const config = require('../test-config');
 const chai = require('chai');
 const expect = chai.expect;
 
-const DataService = require('../../../src/model/data/data-service');
+const DataService = require('../../../src/services/data-service');
 const Schema = require('../../../src/factories/schema-factory').DataSchema;
 const DataDetailSchema = require('../../../src/factories/schema-factory').DataDetailSchema;
 const Service = new DataService(Schema, DataDetailSchema);
 
 describe('Integration: data-service.js -- Get Data', () => {
   before(() => {
-    config.connect((err) => {
-      if (err) {
-        console.log(err.message);
-      }
-    });
+    config.connect();
   });
 
   after(() => {
-    config.close((msg) => {
-      console.log(msg);
-    });
+    config.close();
   });
 
 
@@ -55,17 +48,11 @@ describe('Integration: data-service.js -- Get Data', () => {
 
 describe('Integration: data-service.js -- Get Data (One hundred thousand test)', () => {
   before(() => {
-    config.connect((err) => {
-      if (err) {
-        console.log(err.message);
-      }
-    });
+    config.connect();
   });
 
   after(() => {
-    config.close((msg) => {
-      console.log(msg);
-    });
+    config.close();
   });
   it('should return datas and clear datas', (done) => {
     const size = 10;
@@ -103,17 +90,11 @@ describe('Integration: data-service.js -- Get Data (One hundred thousand test)',
 
 describe('Integration: data-service.js -- Update DataDetail', () => {
   before(() => {
-    config.connect((err) => {
-      if (err) {
-        console.log(err.message);
-      }
-    });
+    config.connect();
   });
 
   after(() => {
-    config.close((msg) => {
-      console.log(msg);
-    });
+    config.close();
   });
 
 
@@ -158,11 +139,7 @@ describe('Integration: data-service.js -- Update DataDetail', () => {
 describe('Integration: data-service.js -- Get All Data', () => {
   let removeId;
   before(() => {
-    config.connect((err) => {
-      if (err) {
-        console.log(err.message);
-      }
-    });
+    config.connect();
   });
 
   before(() => {
@@ -191,9 +168,7 @@ describe('Integration: data-service.js -- Get All Data', () => {
   after(() => Service.remove(removeId));
 
   after(() => {
-    config.close((msg) => {
-      console.log(msg);
-    });
+    config.close();
   });
 });
 

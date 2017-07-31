@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const config = require('../test-config');
 const chai = require('chai');
 const assert = chai.assert;
@@ -8,17 +7,11 @@ const request = require('supertest')(app);
 
 describe('Integration: dataApi-controller.js -- Get Data use restful api ', () => {
   before(() => {
-    config.connect((err) => {
-      if (err) {
-        console.log(err.message);
-      }
-    });
+    config.connect();
   });
 
   after(() => {
-    config.close((msg) => {
-      console.log(msg);
-    });
+    config.close();
   });
 
 
@@ -51,11 +44,7 @@ describe('Integration: dataApi-controller.js -- Getting Data from graphQL api ',
   let keyId;
 
   before(() => {
-    config.connect((err) => {
-      if (err) {
-        console.log(err.message);
-      }
-    });
+    config.connect();
   });
 
   before('Creating test data', () => {
@@ -109,9 +98,7 @@ describe('Integration: dataApi-controller.js -- Getting Data from graphQL api ',
   after(() => request.del(`/datas/${keyId}`).expect(200));
 
   after(() => {
-    config.close((msg) => {
-      console.log(msg);
-    });
+    config.close();
   });
 
 });
@@ -164,9 +151,65 @@ describe('Integration: dataApi-controller.js -- Getting Data from graphQL api (a
   after(() => request.del(`/datas/${keyId}`).expect(200));
 
   after(() => {
-    config.close((msg) => {
-      console.log(msg);
-    });
+    config.close();
+  });
+
+});
+
+describe('Integration: dataApi-controller.js -- Getting Data from graphQL api (nest data)', () => {
+  let keyId;
+
+  before(() => config.connect());
+
+  before('Creating test data', () => {
+    const input = {
+      data: [{
+        id: '1',
+        company: {
+          name: 'goodjob',
+          phone: '12345'
+        },
+        author: 'mark',
+        age: 20
+      }, {
+        id: '2',
+        company: {
+          name: 'job',
+          phone: '12345'
+        },
+        author: 'lin',
+        age: 20
+      }],
+      author: 'Mark',
+      describe: 'Test'
+    };
+    return request.post('/datas')
+            .send(input)
+            .then((res) => {
+              keyId = res.body._id;
+            });
+  });
+
+
+  it('should get data when getting the nest data', () => {
+    const author = 'mark';
+    return request.post(`/api/${author}/${keyId}-datas/graphql`)
+            .send({
+              query: '{ datas { author,company { name } } }'
+            }).then((res) => {
+              const result = res.body.data.datas;
+              assert.isArray(result);
+              assert.lengthOf(result, 2);
+              assert.property(result[0], 'author');
+              assert.property(result[0], 'company');
+            });
+  });
+
+
+  after(() => request.del(`/datas/${keyId}`).expect(200));
+
+  after(() => {
+    config.close();
   });
 
 });

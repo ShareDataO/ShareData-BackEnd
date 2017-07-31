@@ -1,4 +1,4 @@
-const controller = require('./dataApi-controller');
+const controller = require('../controllers/dataApi-controller');
 const Router = require('express').Router;
 const router = new Router();
 

@@ -1,6 +1,6 @@
-const DataService = require('./data-service');
-const DataSchema = require('../../factories/schema-factory').DataSchema;
-const DataDetailSchema = require('../../factories/schema-factory').DataDetailSchema;
+const DataService = require('../services/data-service');
+const DataSchema = require('../factories/schema-factory').DataSchema;
+const DataDetailSchema = require('../factories/schema-factory').DataDetailSchema;
 
 const dataService = new DataService(DataSchema, DataDetailSchema);
 

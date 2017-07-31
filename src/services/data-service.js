@@ -1,7 +1,7 @@
-const sizeOf = require('../../lib/lib-sizeCal');
-const validator = require('../../lib/lib-validator');
-const parserObj = require('../../parser/jsonParser');
-const config = require('../../../config');
+const sizeOf = require('../lib/lib-sizeCal');
+const validator = require('../lib/lib-validator');
+const parserObj = require('../parser/jsonParser');
+const config = require('../../config');
 
 class DataModel {
 
@@ -43,7 +43,6 @@ class DataModel {
 
     return new Promise((resolve, reject) => {
       saveDataResult.then((data) => {
-        console.time('!!!Create Data timer');
 
         const dataId = data._id.toString();
         const asyncDatas = this.splitData(dataId, parserResult.datas, parserResult.key);
@@ -51,7 +50,6 @@ class DataModel {
         asyncFucs.push(this.bulkSaveDataDetail(asyncDatas));
 
         Promise.all(asyncFucs).then(datadetails => {
-          console.timeEnd('!!!Create Data timer');
           resolve(data);
         });
 
@@ -174,11 +172,9 @@ class DataModel {
     }
 
     const promise = new Promise((resolve, reject) => {
-      console.time('!!!Remove Data timer');
       const removeDataPromise = this.removeDataByDataId(id);
       const removeDataDetailPromise = this.removeDataDetailsByDataId(id);
       Promise.all([removeDataPromise, removeDataDetailPromise]).then(data => {
-        console.timeEnd('!!!Remove Data timer');
         resolve(data);
       }).catch((err) => {
         reject(err);

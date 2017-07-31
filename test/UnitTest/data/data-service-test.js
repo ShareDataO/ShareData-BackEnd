@@ -6,7 +6,7 @@ const expect = chai.expect;
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-const DataService = require('../../../src/model/data/data-service');
+const DataService = require('../../../src/services/data-service');
 const Schema = require('../../../src/factories/schema-factory').DataSchema;
 const DataDetailSchema = require('../../../src/factories/schema-factory').DataDetailSchema;
 const Service = new DataService(Schema, DataDetailSchema);

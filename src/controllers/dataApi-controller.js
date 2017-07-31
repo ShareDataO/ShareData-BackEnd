@@ -1,13 +1,13 @@
-const DataService = require('./data-service');
-const DataApiService = require('./dataApi-service');
-const DataSchema = require('../../factories/schema-factory').DataDetailSchema;
-const DataDetailSchema = require('../../factories/schema-factory').DataDetailSchema;
+const DataService = require('../services/data-service');
+const DataApiService = require('../services/dataApi-service');
+const DataSchema = require('../factories/schema-factory').DataDetailSchema;
+const DataDetailSchema = require('../factories/schema-factory').DataDetailSchema;
 
 const dataService = new DataService(DataSchema, DataDetailSchema);
 const dataApiService = new DataApiService(DataDetailSchema);
 
 const graphql = require('graphql').graphql;
-const graphQlScheam = require('./schemas/graphQl-schema');
+const graphQlScheam = require('../model/graphQl-schema');
 
 class DataApiController {
   constructor(dataService, dataApiService) {

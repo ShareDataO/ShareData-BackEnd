@@ -1,4 +1,3 @@
-const obj = require('./selectKey');
 /**
  * parser is use parse input data to array json object
  *

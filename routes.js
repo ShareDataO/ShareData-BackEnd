@@ -1,8 +1,8 @@
 const Router = require('express').Router;
 const router = new Router();
 
-const data = require('./src/model/data/data-router');
-const apiData = require('./src/model/data/dataApi-router');
+const data = require('./src/routes/data-router');
+const apiData = require('./src/routes/dataApi-router');
 
 
 router.route('/').get((req, res) => {

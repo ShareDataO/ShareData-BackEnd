@@ -1,10 +1,9 @@
-const mongoose = require('mongoose');
 const config = require('../test-config');
 const chai = require('chai');
 const expect = chai.expect;
 
-const DataServiceClass = require('../../../src/model/data/data-service');
-const DataApiServiceClass = require('../../../src/model/data/dataApi-service');
+const DataServiceClass = require('../../../src/services/data-service');
+const DataApiServiceClass = require('../../../src/services/dataApi-service');
 const DataSchema = require('../../../src/factories/schema-factory').DataSchema;
 const DataDetailSchema = require('../../../src/factories/schema-factory').DataDetailSchema;
 const DataApiService = new DataApiServiceClass(DataDetailSchema);
@@ -12,17 +11,11 @@ const DataService = new DataServiceClass(DataSchema, DataDetailSchema);
 
 describe('Integration: dataApi-service.js -- Get Data', () => {
   before(() => {
-    config.connect((err) => {
-      if (err) {
-        console.log(err.message);
-      }
-    });
+    config.connect();
   });
 
   after(() => {
-    config.close((msg) => {
-      console.log(msg);
-    });
+    config.close();
   });
 
 
