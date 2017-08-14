@@ -7,7 +7,7 @@ const {
     GraphQLObjectType
 } = require('graphql');
 
-function _getDataGraphQlType(data) {
+function _getDataGraphQlType(data, key) {
   switch (typeof data) {
     case 'number':
       return GraphQLInt;
@@ -22,7 +22,7 @@ function _getDataGraphQlType(data) {
   if (Array.isArray(data)) {
     return new GraphQLList(_generateType((data[0])));  // eslint-disable-line
   } else if (typeof data === 'object') {
-    return _generateType(data, 'dynamic'); // eslint-disable-line
+    return _generateType(data, key); // eslint-disable-line
   }
 }
 
@@ -38,7 +38,7 @@ function _generateType(datas, typeName) {
   const keys = Object.keys(target);
   keys.forEach((key) => {
     result[key] = {
-      type: _getDataGraphQlType(target[key])
+      type: _getDataGraphQlType(target[key], key)
     };
   });
   return new GraphQLObjectType({
