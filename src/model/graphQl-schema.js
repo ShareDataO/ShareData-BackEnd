@@ -13,26 +13,36 @@ function _getDataGraphQlType(data) {
       return GraphQLInt;
     case 'string':
       return GraphQLString;
-    case 'object':
-      return Array.isArray(data) ? GraphQLList : GraphQLObjectType;
     case 'boolean':
       return GraphQLBoolean;
     default:
       break;
   }
+
+  if (Array.isArray(data)) {
+    return new GraphQLList(_generateType((data[0])));  // eslint-disable-line
+  } else if (typeof data === 'object') {
+    return _generateType(data, 'dynamic'); // eslint-disable-line
+  }
 }
 
 
-function _generateType(datas) {
+function _generateType(datas, typeName) {
   const result = {};
-  const keys = Object.keys(datas[0]);
+  let target;
+  if (Array.isArray(datas)) {
+    target = datas[0];
+  } else {
+    target = datas;
+  }
+  const keys = Object.keys(target);
   keys.forEach((key) => {
     result[key] = {
-      type: _getDataGraphQlType(datas[0][key])
+      type: _getDataGraphQlType(target[key])
     };
   });
   return new GraphQLObjectType({
-    name: 'dynamic',
+    name: typeName,
     fields: result
   });
 }
@@ -44,7 +54,7 @@ function _generateDyanmicScheam(datas) {
       name: 'root',
       fields: {
         datas: {
-          type: new GraphQLList(_generateType(datas)),
+          type: new GraphQLList(_generateType(datas, 'origin')),
           resolve: () => datas
         }
       }

@@ -195,13 +195,14 @@ describe('Integration: dataApi-controller.js -- Getting Data from graphQL api (n
     const author = 'mark';
     return request.post(`/api/${author}/${keyId}-datas/graphql`)
             .send({
-              query: '{ datas { author,company { name } } }'
+              query: '{ datas { author,age } }'
             }).then((res) => {
+              console.log(res.body);
               const result = res.body.data.datas;
               assert.isArray(result);
               assert.lengthOf(result, 2);
               assert.property(result[0], 'author');
-              assert.property(result[0], 'company');
+              assert.property(result[0], 'age');
             });
   });
 
